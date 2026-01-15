@@ -158,8 +158,8 @@ void _init(void){
 
         multi_lcd_display_flush(i, disp_stack[i], display_frame_free_cb);
     }
-
-    MLOGI("%s\r\n", __func__);
+    
+    MLOGI("%s: displays inited.\r\n", __func__);
 }
 //-----------------------------------------------------------------------------
 void blur_frame(multi_lcd_id_t ID){
@@ -277,11 +277,12 @@ void pal_load_image_to_frame_buf(multi_lcd_id_t ID, uint8_t * image_indx, PALETT
 }
 //-----------------------------------------------------------------------------
 void pal_init(void){
+
     if(!_lock){
         rtos_init_mutex(&_lock);
     }
 
-    uint32_t frame_len = DW_SCREEN * DH_SCREEN * 2;
+    /*uint32_t frame_len = DW_SCREEN * DH_SCREEN * 2;
 
     for(multi_lcd_id_t i = 0; i < MULTI_LCD_ID_MAX; i++){
 
@@ -311,13 +312,11 @@ void pal_init(void){
         }
 
        multi_lcd_display_flush(i, disp_stack[i], display_frame_free_cb);
-    }
+    }*/
 
-    MLOGI("%s: displays inited.\r\n", __func__);
+    _init();
 
-    palette_generate(&_palette);
-
-    MLOGI("%s: palette generated.\r\n", __func__);
+    palette_generate(&_palette);    
 
     mTimeStamp_Start(&palTmLbl);
 

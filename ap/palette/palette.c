@@ -59,6 +59,7 @@ void palette_generate(PALETTE * palette){
     /*for(int i = 0; i < PALETTE_SIZE; i++){
         PLOGI("[%d][0x%04X]\r\n", i, *palette[i]);
     }*/
+   PLOGI("%s: palette generated.\r\n", __func__);
 }
 //-----------------------------------------------------------------------------
 uint8_t palette_get_color_idx(uint16_t color, PALETTE * palette){
