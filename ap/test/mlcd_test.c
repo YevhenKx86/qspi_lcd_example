@@ -243,14 +243,14 @@ static TimeStamp_TypeDef palTmLbl;
 //-----------------------------------------------------------------------------
 void pal_load_image(const uint16_t * image, PALETTE * palette, uint8_t * image_indexed){
     //MLOGI("%s: enter\r\n", __func__);
-    rtos_lock_mutex(&_lock);
+    //rtos_lock_mutex(&_lock);
     for(int y = 0; y < IMAGE_H; y++){
         for (int x = 0; x < IMAGE_W; x++){
             image_indexed[y * IMAGE_H + x] = palette_get_color_idx(image[y * IMAGE_H + x], palette);
         }  
         MLOGI("Row %d\r\n", y);      
     }
-    rtos_unlock_mutex(&_lock);
+    //rtos_unlock_mutex(&_lock);
 }
 //-----------------------------------------------------------------------------
 
@@ -273,7 +273,7 @@ void pal_load_image_to_frame_buf(multi_lcd_id_t ID, uint8_t * image_indx, PALETT
         }
     }
     
-    MLOGI("%s: done!\r\n", __func__);
+    //MLOGI("%s: done!\r\n", __func__);
 }
 //-----------------------------------------------------------------------------
 void pal_init(void){
@@ -411,22 +411,24 @@ void mlcd_test(void){
 
     while(1){        
 
-        for(int i = MULTI_LCD_ID_1; i < MULTI_LCD_ID_MAX; i++){
+        mTimeStamp_Start(&palTmLbl);
+        for(int k = 0; k < 10; k++){            
+            for(int i = MULTI_LCD_ID_1; i < MULTI_LCD_ID_MAX; i++){
 
-            mTimeStamp_Start(&palTmLbl);
-            pal_load_image_to_frame_buf(i, image_indx, &_palette);
-            mTimeStamp_Stop(&palTmLbl);
+                pal_load_image_to_frame_buf(i, image_indx, &_palette);         
 
-            multi_lcd_display_flush(i, disp_stack[i], display_frame_free_cb);
+                //multi_lcd_display_flush(i, disp_stack[i], display_frame_free_cb);
+            }            
         }
+        mTimeStamp_Stop(&palTmLbl);
 
-        if(palTmLbl.count % TIME_LBL_PERIOD == 0){
+        if(palTmLbl.count % TIME_LBL_PERIOD == 0){            
+            MLOGI("%s: %d frames done \r\n", __func__, palTmLbl.count*10*3);
             mTimeStamp_StatisticsAndReset(&palTmLbl);
-            MLOGI("%s: 30 frames done \r\n", __func__);
         }
 
-        MLOGI("%s: draw screens done\r\n", __func__);
-        rtos_delay_milliseconds(1000);        
+        //MLOGI("%s: draw screens done\r\n", __func__);
+        //rtos_delay_milliseconds(1000);        
     }
     
 #endif
