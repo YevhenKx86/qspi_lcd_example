@@ -141,19 +141,19 @@ void _init(void){
             lcd_qspi_display_fill_pure_color(disp_stack[i], RED_COLOR);
             lsd_qspi_fill_image_120x120(i, DW_FRAME_OFFSET, DH_FRAME_OFFSET);
             draw_text((uint16_t*)disp_stack[i]->frame, "DISP1", TEXT_X, TEXT_Y, WHITE_COLOR);
-            MLOGI("%s: display#%d\r\n", __func__, i);
+            MLOGI("%s: display#%d, %p\r\n", __func__, i, disp_stack[i]);
         }
         else if(i == MULTI_LCD_ID_2){
             lcd_qspi_display_fill_pure_color(disp_stack[i], GREEN_COLOR);
             lsd_qspi_fill_image_120x120(i, DW_FRAME_OFFSET, DH_FRAME_OFFSET);
             draw_text((uint16_t*)disp_stack[i]->frame, "DISP2", TEXT_X, TEXT_Y, WHITE_COLOR);
-            MLOGI("%s: display#%d\r\n", __func__, i);
+            MLOGI("%s: display#%d, %p\r\n", __func__, i, disp_stack[i]);
         }
         else{
             lcd_qspi_display_fill_pure_color(disp_stack[i], BLUE_COLOR);
             lsd_qspi_fill_image_120x120(i, DW_FRAME_OFFSET, DH_FRAME_OFFSET);
             draw_text((uint16_t*)disp_stack[i]->frame, "DISP3", TEXT_X, TEXT_Y, WHITE_COLOR);
-            MLOGI("%s: display#%d\r\n", __func__, i);
+            MLOGI("%s: display#%d, %p\r\n", __func__, i, disp_stack[i]);
         }
 
         multi_lcd_display_flush(i, disp_stack[i], display_frame_free_cb);
@@ -415,9 +415,13 @@ void mlcd_test(void){
         for(int k = 0; k < 10; k++){            
             for(int i = MULTI_LCD_ID_1; i < MULTI_LCD_ID_MAX; i++){
 
-                pal_load_image_to_frame_buf(i, image_indx, &_palette);         
+                pal_load_image_to_frame_buf(i, image_indx, &_palette);   
 
-                //multi_lcd_display_flush(i, disp_stack[i], display_frame_free_cb);
+                avdk_err_t err = 
+
+                    multi_lcd_display_flush(i, disp_stack[i], display_frame_free_cb);
+                
+                MLOGI("%s: display#%d, flush err %d\r\n", __func__, i, err);
             }            
         }
         mTimeStamp_Stop(&palTmLbl);

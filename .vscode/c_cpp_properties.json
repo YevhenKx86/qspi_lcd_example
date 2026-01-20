@@ -5,7 +5,11 @@
             "includePath": [
                 "${workspaceFolder}/**"
             ],
-            "defines": ["MLCD_PALETTE_TEST_RUN"],
+            "defines": [
+                "\"_DEBUG\",",
+                "\"UNICODE\",",
+                "\"_UNICODE\""
+            ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
